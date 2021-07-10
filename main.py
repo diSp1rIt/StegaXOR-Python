@@ -1,5 +1,8 @@
 from math import gcd
 from random import randint as rand
+import matplotlib.pyplot as plt
+from tqdm import tqdm as prog
+from time import time
 
 
 def encrypt(message: bytes, key: bytes):
@@ -45,18 +48,20 @@ def decrypt(message: bytes, key: bytes):
         return bytes(decoded)
 
 
-message = 'Привет, мир!'
-print(f'Исходное сообщение: {message}')
+def test(message: str, key: str):
+    decrypt(encrypt(message.encode('utf-8'), key.encode('utf-8')), key.encode('utf-8'))
 
-key = 'Какой такой мир?'
-print(f'Ключ: {key}')
 
-encrypted_message = encrypt(message.encode('utf-8'), key.encode('utf-8'))
-print(f'Зашифрованный текст: {encrypted_message}')
+ax = plt.axes(projection='3d')
+ax.set_xlabel('Time, c')
+ax.set_ylabel('Length of message')
+ax.set_zlabel('Length of key')
 
-decrypted_message = decrypt(encrypted_message, key.encode('utf-8')).decode('utf-8')
-print(f'Расшифрованное сообщение: {decrypted_message}')
-print()
+for key_len in prog(range(1, 10 ** 5, 1000)):
+    for message_len in range(1, 10 ** 4, 1000):
+        time_start = time()
+        test('a' * message_len, 'b' * key_len)
+        time_end = time() - time_start
+        ax.scatter3D(time_end, message_len, key_len)
 
-print(f'Длина исходного текста: {len(message)}')
-print(f'Длина зашифрованного текста: {len(encrypted_message)}')
+plt.show()
