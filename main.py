@@ -52,16 +52,16 @@ def test(message: str, key: str):
     decrypt(encrypt(message.encode('utf-8'), key.encode('utf-8')), key.encode('utf-8'))
 
 
-ax = plt.axes(projection='3d')
+ax = plt.axes()
 ax.set_xlabel('Time, c')
 ax.set_ylabel('Length of message')
-ax.set_zlabel('Length of key')
 
-for key_len in prog(range(1, 10 ** 5, 1000)):
-    for message_len in range(1, 10 ** 4, 1000):
-        time_start = time()
-        test('a' * message_len, 'b' * key_len)
-        time_end = time() - time_start
-        ax.scatter3D(time_end, message_len, key_len)
+key_len = 1024
+size = 3
+for message_len in prog(range(1, 10 ** (size + 3), 10 ** size)):
+    time_start = time()
+    test('a' * message_len, 'b' * key_len)
+    time_end = time() - time_start
+    ax.scatter(time_end * 1000, message_len, 2)
 
 plt.show()
