@@ -57,8 +57,8 @@ ax.set_xlabel('Time, c')
 ax.set_ylabel('Length of message')
 
 key_len = 1024
-size = 3
-for message_len in prog(range(1, 10 ** (size + 3), 10 ** size)):
+size = 6
+for message_len in prog(range(1, 10 ** (size + 1), 6 ** size)):
     time_start = time()
     test('a' * message_len, 'b' * key_len)
     time_end = time() - time_start
